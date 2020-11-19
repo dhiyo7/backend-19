@@ -1,4 +1,7 @@
 const express = require("express");
+const logger = require("morgan");
+
+const mainRouter = require("./src/routes/index");
 
 const app = express();
 
@@ -8,12 +11,17 @@ app.listen(port, () => {
   console.log(`Server is running at port ${port}`);
 });
 
-// localhost:8000/products
-// endpoint => /products
-// localhost:8000/
-// endpoint => /
+// menambahkan logger
+app.use(logger("dev"));
 
-// membuat handler untuk endpoint /
-app.get("/", (req, res) => {
-  res.send("Selamat Datang");
-});
+// menambahkan parser untuk x-www-form-urlencoded
+app.use(express.urlencoded({ extended: false }));
+// extended: false => menggunakan qs
+// extended: true => menggunakan querystring
+
+// menambahkan parser untuk raw json
+app.use(express.json());
+
+app.use("/", mainRouter);
+
+module.exports = app;
