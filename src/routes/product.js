@@ -24,13 +24,14 @@ productRouter.get("/:id", (req, res) => {
     .then((data) => {
       if (data.length) {
         res.json(data[0]);
+      } else {
+        res.status(404).json({
+          msg: "Data not Found",
+        });
       }
-      res.status(404).json({
-        msg: "Data not Found",
-      });
     })
     .catch((err) => {
-      res.json(err);
+      res.status(500).json(err);
     });
 });
 
