@@ -3,6 +3,7 @@ const express = require("express");
 const productsRouter = express.Router();
 
 const db = require("../configs/mySQL");
+const form = require("../helpers/form");
 
 // localhost:8000/products
 // GET
@@ -21,7 +22,8 @@ productsRouter.get("/", (_, res) => {
   });
   getAllProducts
     .then((data) => {
-      res.json(data);
+      // res.json(data);
+      form.success(res, data);
     })
     .catch((err) => {
       res.json(err);

@@ -1,5 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
+const cors = require("cors");
+// cors => cross origin resource sharing
 
 const mainRouter = require("./src/routes/index");
 
@@ -10,6 +12,9 @@ const port = 8000;
 app.listen(port, () => {
   console.log(`Server is running at port ${port}`);
 });
+
+// memperbolehkan access dari semua origin
+app.use(cors());
 
 // menambahkan logger
 app.use(logger("dev"));
