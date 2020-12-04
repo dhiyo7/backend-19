@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
@@ -13,6 +14,7 @@ app.listen(port, () => {
   console.log(`Server is running at port ${port}`);
 });
 
+app.use(express.static("public"));
 // memperbolehkan access dari semua origin
 app.use(cors());
 
@@ -28,5 +30,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/", mainRouter);
+
+// app.get("/test", (req, res) => {
+//   res.json(req.header);
+// });
 
 module.exports = app;

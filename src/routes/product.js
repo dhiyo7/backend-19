@@ -9,6 +9,7 @@ const db = require("../configs/mySQL");
 // localhost:8000/product/{params}
 productRouter.get("/:id", (req, res) => {
   const { id } = req.params;
+  // const level = req.decodedToken.level;
   const getProductById = new Promise((resolve, reject) => {
     const qs =
       "SELECT p.id, p.product_name, p.product_description, p.product_price, c.category_name, p.product_qty, p.created_at, p.updated_at FROM products AS p JOIN category AS c ON c.id = p.category_id WHERE p.id = ?";

@@ -8,13 +8,30 @@ const form = require("../helpers/form");
 // localhost:8000/products
 // GET
 
-productsRouter.get("/", (_, res) => {
+productsRouter.get("/", (req, res) => {
   const getAllProducts = new Promise((resolve, reject) => {
+    const { query } = req;
+    const limit = Number(query.limit) || 2;
+    const page = Number(query.page) || 1;
+    // limit  = 5
+    // page   = 1 2 3  4
+    // offset = 0 5 10 15
+    // offset = (page-1)*limit
+    const offset = (page - 1) * limit || 0;
     const queryString =
-      "SELECT p.id, p.product_name, p.product_description, p.product_price, c.category_name, p.product_qty, p.created_at, p.updated_at FROM products AS p JOIN category AS c ON c.id = p.category_id";
-    db.query(queryString, (err, data) => {
+      "SELECT p.id, p.product_name, p.product_description, p.product_price, c.category_name, p.product_qty, p.created_at, p.updated_at FROM products AS p JOIN category AS c ON c.id = p.category_id LIMIT ? OFFSET ?";
+    db.query(queryString, [limit, offset], (err, data) => {
+      const newResult = {
+        products: data,
+        pageInfo: {
+          currentPage: page,
+          previousPage:
+            page === 1 ? null : `/products?page=${page - 1}&limit=${limit}`,
+          nextPage: `/products?page=${page + 1}&limit=${limit}`,
+        },
+      };
       if (!err) {
-        resolve(data);
+        resolve(newResult);
       } else {
         reject(err);
       }
